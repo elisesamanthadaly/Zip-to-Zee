@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zip to Zee - Data Generation</title>
+</head>
+<body>
+    <form id="zipTZForm">
+        <input type="text" id="zipTZData">
+        <input type="submit">
+    </form>
+    <table id="zipTZOutput">
+    </table>
+
+    <script>
+        zipTZForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var dataArray = zipTZData.value.split(" ");
+            var newDataArray = dataArray.map(processFunction);
+            function processFunction(element) {
+                var elementArray = element.split("\t");
+                return `case "` + elementArray[0] + `": return "` + elementArray[1] + `"; break;`
+
+                // switch (element) {
+                //     case "30628": return "ATL"; break;
+                //     // Repeat!
+                //     default:
+                //         return "Invalid Zip";
+                // }
+            }
+            for (let element of newDataArray) {
+                var newTd = document.createElement("td");
+                newTd.innerHTML = element;
+                var newTr = document.createElement("tr");
+                newTr.append(newTd);
+                document.getElementById("zipTZOutput").append(newTr);
+            }
+
+            document.getElementById("zipTZForm").style.display = "none";
+
+            function copyOutput(element) {
+                var urlField = document.getElementById(element);
+                var range = document.createRange();
+                range.selectNode(urlField);
+                window.getSelection().addRange(range);
+                document.execCommand("copy");
+            }
+            copyOutput("zipTZOutput");
+        });
+    </script>
+</body>
+</html>
